@@ -6,6 +6,6 @@ SQL_DB_URL = 'sqlite:///./app.db'
 
 engine = create_engine( SQL_DB_URL, connect_args={ 'check_same_thread': False } )
 
-SessionLocal = sessionmaker(autocomit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

@@ -31,12 +31,14 @@ async def create_item(item: schemas.Item, db: Session = Depends(get_db)):
         db_item = crud.get_item_by_name(db, name=item.name)
         if db_item:
             raise HTTPException(status_code=400, detail=json.dumps({'error':'Item Already Exist'}))
+        
         db_item = crud.create_item(db=db, item=item)
+        item_dict = schemas.Item.to_dict(db_item).model_dump()
         return Response(status_code=201, 
                         content=json.dumps({'message':'Item Created Successfully', 
-                                            'details':db_item}))
+                                            'details':item_dict}))
     except Exception as e:
-        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))
+        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': str(e)}))
 
 @app.get("/items/")
 async def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -45,7 +47,7 @@ async def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_
         return Response(status_code=200, 
                         content=json.dumps({'items':items}))
     except Exception as e:
-        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))
+        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': str(e)}))
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, db: Session = Depends(get_db)):
@@ -57,7 +59,7 @@ async def read_item(item_id: int, db: Session = Depends(get_db)):
         return Response(status_code=200, 
                         content=json.dumps({'item':db_item}))
     except Exception as e:
-        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))
+        raise HTTPException(status_code=400, detail={'message':'An Error Occured', 'error': str(e)})
 
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item_update: schemas.ItemUpdate, db: Session = Depends(get_db)):
@@ -67,8 +69,10 @@ async def update_item(item_id: int, item_update: schemas.ItemUpdate, db: Session
             raise HTTPException(status_code=400, detail=json.dumps({'error':'Item Does Not Exist'}))
         
         db_item = crud.update_item(db=db, item_id=item_id, item_update=item_update)
+        item_dict = schemas.Item.to_dict(db_item).model_dump()
         return Response(status_code=200, 
-                        content=json.dumps({'message':'Item Updated Successfully', 'item':db_item}))
+                        content=json.dumps({'message':'Item Updated Successfully', 
+                                            'item':item_dict}))
     except Exception as e:
         raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))
 
@@ -80,7 +84,9 @@ async def delete_item(item_id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=400, detail=json.dumps({'error':'Item Does Not Exist'}))
         
         db_item = crud.delete_item(db=db, item_id=item_id)
+        item_dict = schemas.Item.to_dict(db_item).model_dump()
         return Response(status_code=200, 
-                        content=json.dumps({'message':'Item Deleted Successfully', 'item':db_item}))
+                        content=json.dumps({'message':'Item Deleted Successfully', 
+                                            'item':item_dict}))
     except Exception as e:
         raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))

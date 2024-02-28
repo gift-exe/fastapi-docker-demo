@@ -1,0 +1,8 @@
+versions/*
+.env
+__pycache__/*
+/__pycache__/
+migrations/versions/3dad6c060614_initial_migration.py
+migrations/versions/__pycache__/3dad6c060614_initial_migration.cpython-310.pyc
+migrations/__pycache__/env.cpython-310.pyc
+
