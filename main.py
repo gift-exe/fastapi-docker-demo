@@ -44,8 +44,9 @@ async def create_item(item: schemas.Item, db: Session = Depends(get_db)):
 async def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     try:
         items = crud.get_items(db, skip=skip, limit=limit)
+        items_list = [schemas.Item.to_dict(i).model_dump() for i in items]
         return Response(status_code=200, 
-                        content=json.dumps({'items':items}))
+                        content=json.dumps({'items':items_list}))
     except Exception as e:
         raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': str(e)}))
 
@@ -56,8 +57,9 @@ async def read_item(item_id: int, db: Session = Depends(get_db)):
         if db_item is None:
             raise HTTPException(status_code=400, detail=json.dumps({'error':'Item Does Not Exist'}))
         
+        item_dict = schemas.Item.to_dict(db_item).model_dump()
         return Response(status_code=200, 
-                        content=json.dumps({'item':db_item}))
+                        content=json.dumps({'item':item_dict}))
     except Exception as e:
         raise HTTPException(status_code=400, detail={'message':'An Error Occured', 'error': str(e)})
 
