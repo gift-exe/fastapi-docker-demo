@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQL_DB_URL = os.getenv('POSTGRES_DB_URL_LOCAL')
+SQL_DB_URL = os.getenv('POSTGRES_DB_URL')
 
 engine = create_engine(SQL_DB_URL)
 

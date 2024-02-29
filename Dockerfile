@@ -1,5 +1,7 @@
 FROM python:3.10
 
+ENV POSTGRES_DB_URL=postgresql://postgres:AwesomeGod003@172.17.0.3:5432/fastapi-docker-demo
+
 WORKDIR /app 
 
 COPY . /app
