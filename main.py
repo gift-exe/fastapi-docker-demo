@@ -65,7 +65,7 @@ async def read_item(item_id: int, db: Session = Depends(get_db)):
 
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item_update: schemas.ItemUpdate, db: Session = Depends(get_db)):
-    try:
+    #try:
         db_item = crud.get_item_by_id(db=db, id=item_id)
         if db_item is None:
             raise HTTPException(status_code=400, detail=json.dumps({'error':'Item Does Not Exist'}))
@@ -75,8 +75,8 @@ async def update_item(item_id: int, item_update: schemas.ItemUpdate, db: Session
         return Response(status_code=200, 
                         content=json.dumps({'message':'Item Updated Successfully', 
                                             'item':item_dict}))
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': {str(e)}}))
+    # except Exception as e:
+    #     raise HTTPException(status_code=400, detail=json.dumps({'message':'An Error Occured', 'error': str(e)}))
 
 @app.delete("/items/{item_id}")
 async def delete_item(item_id: int, db: Session = Depends(get_db)):

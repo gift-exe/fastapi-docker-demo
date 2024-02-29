@@ -20,8 +20,9 @@ def create_item(db: Session, item: schemas.Item):
 
 def update_item(db: Session, item_id:int, item_update: schemas.ItemUpdate):
     db_item = db.query(models.Item).filter(models.Item.id == item_id)
-    db_item.update(**item_update.model_dump(exclude_unset=True), synchronize_session=False)
+    db_item.update(item_update.model_dump(exclude_unset=True), synchronize_session=False)
     db.commit()
+    print(f'\n{db_item}\n')
     return db_item
 
 def delete_item(db: Session, item_id:int):
